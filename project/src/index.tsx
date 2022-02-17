@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
+import {Setting} from './consts';
 
-const Setting = {
-  ADS_COUNT: 5,
-};
 
 ReactDOM.render(
   <React.StrictMode>
