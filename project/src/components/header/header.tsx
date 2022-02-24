@@ -1,6 +1,6 @@
 import Logo from '../../components/logo/logo';
 import NavUser from '../../components/nav-user/nav-user';
-import {HeaderProps} from '../../types/types-component';
+import { HeaderProps } from '../../types/header';
 
 function Header(props: HeaderProps) : JSX.Element {
   const {isLoginPage, isAuth} = props;
