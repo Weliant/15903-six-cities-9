@@ -1,7 +1,7 @@
-import {Outlet, useLocation} from 'react-router-dom';
-import {LayoutProps} from '../../types/types-component';
+import { Outlet, useLocation } from 'react-router-dom';
+import { LayoutProps } from '../../types/layout';
 import Header from '../../components/header/header';
-import {AppRoute, AuthorizationStatus} from '../../consts';
+import { AppRoute, AuthorizationStatus } from '../../consts';
 
 function Layout (props: LayoutProps): JSX.Element {
   const {authorizationStatus} = props;

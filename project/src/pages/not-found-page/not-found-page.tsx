@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function NotFoundPage(): JSX.Element {
   return (
     <main className="page__main page__main--favorites page__main--favorites-empty"
@@ -13,7 +15,7 @@ function NotFoundPage(): JSX.Element {
       }}
       >
         <h1>404 Not Found</h1>
-        <a href="/"> Вернуться на главную страницу</a>
+        <Link to="/"> Вернуться на главную страницу </Link>
       </div>
     </main>
   );
