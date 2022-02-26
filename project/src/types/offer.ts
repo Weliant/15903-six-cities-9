@@ -35,8 +35,6 @@ export type Offer = {
   id: number,
 }
 
-export type Offers = Offer[];
-
 export type User = {
   avatarUrl: string,
   id: number,
@@ -53,5 +51,6 @@ export type ReviewOffer = {
 };
 
 export type OfferListProp = {
-  offers: Offers;
+  offers: Offer[];
+  onListItemHover: (offerId: number) => void;
 }

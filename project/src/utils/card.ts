@@ -1,3 +1,3 @@
-import { ratingOffer } from '../consts';
+import { RATING_OFFER } from '../consts';
 
-export const getRatingOffer = (rating: number) => Math.round(rating) / ratingOffer * 100;
+export const getRatingOffer = (rating: number) => Math.round(rating) / RATING_OFFER * 100;

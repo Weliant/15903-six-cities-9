@@ -2,6 +2,7 @@ import { Offer } from './offer';
 
 export type PlaceCardProps = {
   offer: Offer;
-  active?: number;
+  activeCard?: boolean;
   typeView?: string;
+  onCardPlaceHover: (offerId: number) => void;
 }

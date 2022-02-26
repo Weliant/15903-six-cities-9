@@ -2,7 +2,7 @@ export const Setting = {
   ADS_COUNT: 5,
 };
 
-export const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+export const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 export enum AppRoute {
   Root = '/',
@@ -18,8 +18,8 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
-export const ratingOffer = 5;
-export const countImagesOffer = 6;
+export const RATING_OFFER = 5;
+export const COUNT_IMAGE_OFFER = 6;
 
 export enum ImgSize {
   Width = 260,
@@ -27,3 +27,6 @@ export enum ImgSize {
   WidthSmall = 150,
   HeightSmall = 110,
 }
+
+export const URL_MARKER_DEFAULT = '../img/pin.svg';
+export const URL_MARKER_CURRENT = '../img/pin-active.svg';

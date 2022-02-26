@@ -1,7 +1,7 @@
 import { AuthorizationStatus } from '../../consts';
-import { Offers } from '../../types/offer';
+import { Offer } from '../../types/offer';
 
 export type OfferPageProps = {
-  offers: Offers;
+  offers: Offer[];
   authorizationStatus?: AuthorizationStatus;
 }

@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { FavoritesPageProps } from './favorites-page-types';
-import { Offer } from '../../types/offer';
 import { getListOffersFavorites } from '../../utils/favorites';
 import PlaceCard from '../../components/place-card/place-card';
 
@@ -29,7 +28,7 @@ function FavoritesPage({offers}: FavoritesPageProps) : JSX.Element {
                           </div>
                         </div>
                         <div className="favorites__places">
-                          {favorite.offers.map((item) => <PlaceCard key={item.id.toString()} offer={item as Offer} typeView="favorites" />)}
+                          {favorite.offers.map((item) => <PlaceCard key={item.id.toString()} offer={item} typeView="favorites" onCardPlaceHover={() => false } />)}
                         </div>
                       </li>
                     );

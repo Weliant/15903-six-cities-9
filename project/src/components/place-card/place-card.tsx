@@ -1,52 +1,52 @@
 import { Link } from 'react-router-dom';
+import cn from 'classnames';
 import { PlaceCardProps } from '../../types/place-card';
 import { getCapitalizeFirstLetter } from '../../utils/common';
 import { getRatingOffer } from '../../utils/card';
 import { AppRoute, ImgSize } from '../../consts';
 
-function PlaceCard({offer, active, typeView} : PlaceCardProps) : JSX.Element {
+function PlaceCard({offer, typeView, onCardPlaceHover} : PlaceCardProps) : JSX.Element {
   const {id, previewImage, title, isPremium, isFavorite, price, type, rating} = offer;
 
   const ratingPercent = getRatingOffer(rating);
-
-  const bookMarkStyle = `place-card__bookmark-button button ${ isFavorite ? 'place-card__bookmark-button--active': ''}`;
-
-  let cardStyle = 'cities__place-card place-card';
-  let cardImgStyle = 'cities__image-wrapper place-card__image-wrapper';
   let cardImgW = ImgSize.Width;
   let cardImgH = ImgSize.Height;
-  let cardInfoStyle = 'place-card__info';
 
   if (typeView === 'favorites') {
-    cardStyle = 'favorites__card place-card';
-    cardImgStyle = 'favorites__image-wrapper place-card__image-wrapper';
     cardImgW = ImgSize.WidthSmall;
     cardImgH = ImgSize.HeightSmall;
-    cardInfoStyle = 'favorites__card-info place-card__info';
-  } else if (typeView === 'near') {
-    cardStyle = 'near-places__card place-card';
-    cardImgStyle = 'near-places__image-wrapper place-card__image-wrapper';
   }
 
+  const handlePlaceCardMouseEnter = () => {
+    onCardPlaceHover(offer.id);
+  };
+
   return (
-    <article className={cardStyle}>
-      {isPremium ?
-        <div className="place-card__mark">
-          <span>Premium</span>
-        </div>
-        : ''}
-      <div className={cardImgStyle}>
+    <article
+      className={cn('place-card',
+        {'near-places__card': typeView === 'near',
+          'favorites__card': typeView === 'favorites',
+          'cities__place-card': !typeView} )}
+      onMouseEnter={handlePlaceCardMouseEnter}
+    >
+      {isPremium && <div className="place-card__mark"><span>Premium</span></div>}
+      <div
+        className={cn('place-card__image-wrapper',
+          {'near-places__image-wrapper': typeView === 'near',
+            'favorites__image-wrapper': typeView === 'favorites',
+            'cities__image-wrapper': !typeView} )}
+      >
         <Link to={`${AppRoute.Offer}/${id}`}>
           <img className="place-card__image" src={previewImage} width={cardImgW} height={cardImgH} alt="Place" />
         </Link>
       </div>
-      <div className={cardInfoStyle}>
+      <div className={cn('place-card__info', {'favorites__card-info': typeView === 'favorites'} )}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className={bookMarkStyle} type="button">
+          <button className={cn('place-card__bookmark-button button', {'place-card__bookmark-button--active': isFavorite})} type="button">
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>

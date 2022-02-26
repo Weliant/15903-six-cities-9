@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import cn from 'classnames';
 import { OfferPageProps } from './offer-page-types';
-import { Offer } from '../../types/offer';
 import { FormComment } from '../../types/review-form';
 import { AppRoute, AuthorizationStatus } from '../../consts';
 import { getCapitalizeFirstLetter } from '../../utils/common';
@@ -9,18 +9,18 @@ import { getFormattedDate, getOffer, getOfferImages, getOfferNeighbourhood } fro
 import { reviews } from '../../mocks/reviews';
 import ReviewForm from '../../components/review-form/review-form';
 import PlaceCard from '../../components/place-card/place-card';
+import { Offer } from '../../types/offer';
 
 function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const offer = getOffer(offers, id);
+  const offer: Offer = getOffer(offers, id) as Offer;
   const ratingPercent = getRatingOffer(offer.rating);
   const images = getOfferImages(offer);
-  const offerNeighbourhood = getOfferNeighbourhood(offers, id);
+  const offerNeighbourhood = getOfferNeighbourhood(offers, id) as Offer[];
 
   const isAuth = authorizationStatus === AuthorizationStatus.Auth;
-  const bookMarkStyle = `property__bookmark-button button ${ offer.isFavorite ? 'property__bookmark-button--active': ''}`;
 
   const postReview = ({rating, comment}: FormComment) => {
     throw new Error(`Function 'onSendReview' isn't implemented. Data is ${rating} and ${comment}`);
@@ -62,7 +62,11 @@ function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element 
               <h1 className="property__name">
                 {offer.title}
               </h1>
-              <button className={bookMarkStyle} type="button" onClick={handleButtonClick}>
+              <button
+                className={cn('property__bookmark-button button', {'property__bookmark-button--active': offer.isFavorite})}
+                type="button"
+                onClick={handleButtonClick}
+              >
                 <svg className="property__bookmark-icon" width="31" height="33">
                   <use xlinkHref="#icon-bookmark"></use>
                 </svg>
@@ -158,7 +162,7 @@ function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element 
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            {offerNeighbourhood.map((item) => <PlaceCard key={item.id.toString()} offer={item as Offer} typeView="near" />)}
+            {offerNeighbourhood.map((item) => <PlaceCard key={item.id.toString()} offer={item} typeView="near" onCardPlaceHover={() => false }/>)}
           </div>
         </section>
       </div>

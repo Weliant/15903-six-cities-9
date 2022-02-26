@@ -8,7 +8,6 @@ import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import PrivateRoute from '../private-route/private-route';
 import { AppRoute, AuthorizationStatus } from '../../consts';
 import { AppPageProps } from './app-types';
-import { Offers } from '../../types/offer';
 
 function App({adsCount, offers}: AppPageProps): JSX.Element {
   const auth = AuthorizationStatus.Auth;
@@ -19,17 +18,17 @@ function App({adsCount, offers}: AppPageProps): JSX.Element {
         <Route path={AppRoute.Root} element={<Layout authorizationStatus={auth} />}>
           <Route
             index
-            element={<MainPage adsCount={adsCount} offers={offers as Offers}/>}
+            element={<MainPage adsCount={adsCount} offers={offers}/>}
           />
           <Route
             path={AppRoute.Room}
-            element={<OfferPage authorizationStatus={auth} offers={offers as Offers}/>}
+            element={<OfferPage authorizationStatus={auth} offers={offers}/>}
           />
           <Route
             path={AppRoute.Favorites}
             element={
               <PrivateRoute authorizationStatus={auth}>
-                <FavoritesPage offers={offers as Offers} />
+                <FavoritesPage offers={offers} />
               </PrivateRoute>
             }
           />
