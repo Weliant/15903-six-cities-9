@@ -1,13 +1,16 @@
 import {useEffect, useRef} from 'react';
 import leaflet, {Marker} from 'leaflet';
+import cn from 'classnames';
 import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/useMap';
-import { CitiesMapProp } from '../../types/cities';
+import { MapProp } from '../../types/cities';
 import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../consts';
 
-function CitiesMap({height, city, points, selectedPoint}: CitiesMapProp) : JSX.Element {
+function Map({height, width, style, city, points, selectedPoint, typeView}: MapProp) : JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
+  const styleSize = {height: `${height}px`, width: `${width ? width : 'auto'}px`};
+  const styleMap = style ? {...style, ...styleSize} : styleSize;
 
   const defaultCustomIcon = leaflet.icon({
     iconUrl: URL_MARKER_DEFAULT,
@@ -23,6 +26,7 @@ function CitiesMap({height, city, points, selectedPoint}: CitiesMapProp) : JSX.E
 
   useEffect(() => {
     if (map) {
+      map.clearLayers();
       points.forEach((point) => {
         const marker = new Marker({
           lat: point.location.latitude,
@@ -42,12 +46,12 @@ function CitiesMap({height, city, points, selectedPoint}: CitiesMapProp) : JSX.E
 
   return (
     <section
-      className="cities__map map"
-      style={{height: `${height}px`}}
+      className={cn('map', {'cities__map': typeView === 'city', 'property__map': !typeView} )}
+      style={styleMap}
       ref={mapRef}
     >
     </section>
   );
 }
 
-export default CitiesMap;
+export default Map;

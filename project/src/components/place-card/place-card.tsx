@@ -21,6 +21,10 @@ function PlaceCard({offer, typeView, onCardPlaceHover} : PlaceCardProps) : JSX.E
     onCardPlaceHover(offer.id);
   };
 
+  const handlePlaceCardMouseLeave = () => {
+    onCardPlaceHover(null);
+  };
+
   return (
     <article
       className={cn('place-card',
@@ -28,6 +32,7 @@ function PlaceCard({offer, typeView, onCardPlaceHover} : PlaceCardProps) : JSX.E
           'favorites__card': typeView === 'favorites',
           'cities__place-card': !typeView} )}
       onMouseEnter={handlePlaceCardMouseEnter}
+      onMouseLeave={handlePlaceCardMouseLeave}
     >
       {isPremium && <div className="place-card__mark"><span>Premium</span></div>}
       <div

@@ -4,7 +4,7 @@ import { MainPageProps } from './main-page-types';
 import { AppRoute, CITIES } from '../../consts';
 import { getCapitalizeFirstLetter } from '../../utils/common';
 import OfferList from '../../components/offer-list/offer-list';
-import CitiesMap from '../../components/cities-map/cities-map';
+import Map from '../../components/map/map';
 import { Point } from '../../types/cities';
 import { Offer } from '../../types/offer';
 import { getOffer, getOffersByCity } from '../../utils/offer';
@@ -19,17 +19,21 @@ function MainPage({offers}: MainPageProps) : JSX.Element {
   const [height, setHeight] = useState(0);
   const offersByCity = getOffersByCity(active, offers) as Offer[];
 
-  const onListItemHover = (offerId: number) => {
-    const currentOffer = getOffer(offers, offerId) as Offer;
+  const onListItemHover = (offerId: number | null) => {
+    if (offerId) {
+      const currentOffer = getOffer(offers, offerId) as Offer;
 
-    const currentPoint: Point = {
-      id: offerId,
-      latitude: currentOffer.location.latitude,
-      longitude: currentOffer.location.longitude,
-      zoom: currentOffer.location.zoom,
-    };
+      const currentPoint: Point = {
+        id: offerId,
+        latitude: currentOffer.location.latitude,
+        longitude: currentOffer.location.longitude,
+        zoom: currentOffer.location.zoom,
+      };
 
-    setSelectedPoint(currentPoint as Point);
+      setSelectedPoint(currentPoint);
+    } else {
+      setSelectedPoint(undefined);
+    }
   };
 
   useEffect(() => {
@@ -50,7 +54,7 @@ function MainPage({offers}: MainPageProps) : JSX.Element {
   }, [location, navigate, citiesRef]);
 
   return (
-    <main className={`page__main page__main--index ${offersByCity?.length ? '' : 'page__main--index-empty'}`}>
+    <main className={`page__main page__main--index ${!offersByCity?.length && 'page__main--index-empty'}`}>
       <h1 className="visually-hidden">Cities</h1>
       <div className="tabs">
         <section className="locations container">
@@ -92,10 +96,10 @@ function MainPage({offers}: MainPageProps) : JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OfferList offers={offersByCity} onListItemHover={onListItemHover} />
+              <OfferList offers={offersByCity} onListItemHover={onListItemHover} typeView={'city'}/>
             </section>
             <div className="cities__right-section">
-              <CitiesMap height={height} city={offersByCity[0].city} points={offersByCity} selectedPoint={selectedPoint}/>
+              <Map height={height} city={offersByCity[0].city} points={offersByCity} selectedPoint={selectedPoint} typeView='city'/>
             </div>
           </div>
         </div>

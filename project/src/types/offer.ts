@@ -52,5 +52,6 @@ export type ReviewOffer = {
 
 export type OfferListProp = {
   offers: Offer[];
-  onListItemHover: (offerId: number) => void;
+  onListItemHover: (offerId: number | null) => void;
+  typeView?: string;
 }

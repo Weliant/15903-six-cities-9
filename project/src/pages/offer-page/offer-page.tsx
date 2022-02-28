@@ -1,15 +1,15 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import cn from 'classnames';
 import { OfferPageProps } from './offer-page-types';
-import { FormComment } from '../../types/review-form';
-import { AppRoute, AuthorizationStatus } from '../../consts';
+import { Offer } from '../../types/offer';
+import { AppRoute, AuthorizationStatus, MapSize } from '../../consts';
 import { getCapitalizeFirstLetter } from '../../utils/common';
 import { getRatingOffer } from '../../utils/card';
-import { getFormattedDate, getOffer, getOfferImages, getOfferNeighbourhood } from '../../utils/offer';
+import { getOffer, getOfferImages, getOfferNeighbourhood } from '../../utils/offer';
 import { reviews } from '../../mocks/reviews';
-import ReviewForm from '../../components/review-form/review-form';
-import PlaceCard from '../../components/place-card/place-card';
-import { Offer } from '../../types/offer';
+import ReviewsList from '../../components/reviews-list/reviews-list';
+import Map from '../../components/map/map';
+import OfferList from '../../components/offer-list/offer-list';
 
 function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element {
   const { id } = useParams();
@@ -22,8 +22,9 @@ function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element 
 
   const isAuth = authorizationStatus === AuthorizationStatus.Auth;
 
-  const postReview = ({rating, comment}: FormComment) => {
-    throw new Error(`Function 'onSendReview' isn't implemented. Data is ${rating} and ${comment}`);
+  const styleMap = {
+    margin: '0 auto',
+    marginBottom: '50px',
   };
 
   const postFavorites = () => {
@@ -124,46 +125,15 @@ function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element 
                 </p>
               </div>
             </div>
-            <section className="property__reviews reviews">
-              <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
-              <ul className="reviews__list">
-                {reviews.map((review) => (
-                  <li key={review.id} className="reviews__item">
-                    <div className="reviews__user user">
-                      <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                        <img className="reviews__avatar user__avatar" src={review.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
-                      </div>
-                      <span className="reviews__user-name">
-                        {review.user.name}
-                      </span>
-                    </div>
-                    <div className="reviews__info">
-                      <div className="reviews__rating rating">
-                        <div className="reviews__stars rating__stars">
-                          <span style={{width: `${getRatingOffer(review.rating)}%`}}></span>
-                          <span className="visually-hidden">Rating</span>
-                        </div>
-                      </div>
-                      <p className="reviews__text">
-                        {review.comment}
-                      </p>
-                      <time className="reviews__time" dateTime="2019-04-24">{getFormattedDate(review.date)}</time>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              {isAuth && <ReviewForm sendReview={(rating, comment) => {postReview({rating, comment});}} />}
-            </section>
+            <ReviewsList reviews={reviews} isAuth={isAuth}/>
           </div>
         </div>
-        <section className="property__map map"></section>
+        <Map height={MapSize.Height} width={MapSize.Width} city={offer.city} points={offerNeighbourhood} style={styleMap} />
       </section>
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
-          <div className="near-places__list places__list">
-            {offerNeighbourhood.map((item) => <PlaceCard key={item.id.toString()} offer={item} typeView="near" onCardPlaceHover={() => false }/>)}
-          </div>
+          <OfferList offers={offerNeighbourhood} onListItemHover={() => false } />
         </section>
       </div>
     </main>
