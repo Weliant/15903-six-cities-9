@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { AppRoute, cities } from '../../consts';
+import { AppRoute, CITIES } from '../../consts';
 import { getRandomInteger } from '../../utils/common';
 
 function LoginPage() : JSX.Element {
-  const indexCity = getRandomInteger(0, cities.length-1);
+  const indexCity = getRandomInteger(0, CITIES.length-1);
 
   return (
     <main className="page__main page__main--login">
@@ -24,8 +24,8 @@ function LoginPage() : JSX.Element {
         </section>
         <section className="locations locations--login locations--current">
           <div className="locations__item">
-            <Link className="locations__item-link" to={`${AppRoute.Root}#${cities[indexCity].toLowerCase()}`}>
-              <span>{cities[indexCity]}</span>
+            <Link className="locations__item-link" to={`${AppRoute.Root}#${CITIES[indexCity].toLowerCase()}`}>
+              <span>{CITIES[indexCity]}</span>
             </Link>
           </div>
         </section>

@@ -1,11 +1,11 @@
-import { Offers } from '../types/offer';
+import { Offer } from '../types/offer';
 
-type favorite = {
+type Favorite = {
   name: string,
-  offers: Offers,
+  offers: Offer[],
 };
 
-export const getListOffersFavorites = (offers: Offers) => {
+export const getListOffersFavorites = (offers: Offer[]) => {
   const listOffersFavorites = [];
   const citySet = new Set<string>();
 
@@ -16,7 +16,7 @@ export const getListOffersFavorites = (offers: Offers) => {
   const uniqCity: string[] = Array.from(citySet);
 
   for (const city of uniqCity) {
-    const obj: favorite = {
+    const obj: Favorite = {
       name: city,
       offers: [],
     };

@@ -1,6 +1,6 @@
-import { Offers } from '../../types/offer';
+import { Offer } from '../../types/offer';
 
 export type AppPageProps = {
   adsCount: number;
-  offers: Offers;
+  offers: Offer[];
 }

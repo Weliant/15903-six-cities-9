@@ -1,5 +1,5 @@
-import { Offers } from '../../types/offer';
+import { Offer } from '../../types/offer';
 
 export type FavoritesPageProps = {
-  offers: Offers;
+  offers: Offer[];
 }
