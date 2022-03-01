@@ -30,3 +30,8 @@ export enum ImgSize {
 
 export const URL_MARKER_DEFAULT = '../img/pin.svg';
 export const URL_MARKER_CURRENT = '../img/pin-active.svg';
+
+export enum MapSize {
+  Width = 1144,
+  Height = 580,
+}

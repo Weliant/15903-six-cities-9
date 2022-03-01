@@ -1,15 +1,15 @@
 import { useEffect, useState, MutableRefObject } from 'react';
-import { Map, TileLayer } from 'leaflet';
+import leaflet, { LayerGroup, Map, TileLayer } from 'leaflet';
 import { CityOffer } from '../types/offer';
 
 function useMap(
   mapRef: MutableRefObject<HTMLElement | null>,
   city: CityOffer,
-): Map | null {
-  const [map, setMap] = useState<Map | null>(null);
+): LayerGroup | null {
+  const [layerGroup, setLayerGroup] = useState<LayerGroup | null>(null);
 
   useEffect(() => {
-    if (mapRef.current !== null && map === null) {
+    if (mapRef.current !== null && layerGroup === null) {
       const instance = new Map(mapRef.current, {
         center: {
           lat: city.location.latitude,
@@ -25,11 +25,13 @@ function useMap(
 
       instance.addLayer(layer);
 
-      setMap(instance);
-    }
-  }, [mapRef, map, city]);
+      const markerGroup = leaflet.layerGroup().addTo(instance);
 
-  return map;
+      setLayerGroup(markerGroup);
+    }
+  }, [mapRef, layerGroup, city]);
+
+  return layerGroup;
 }
 
 export default useMap;

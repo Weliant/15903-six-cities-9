@@ -7,9 +7,16 @@ export type Point = {
   zoom: number;
 };
 
-export type CitiesMapProp = {
+export type Style = {
+  [propertyName: string]: string;
+};
+
+export type MapProp = {
   height: number;
+  width?: number;
+  style?: Style;
   city: CityOffer;
   points: Offer[];
-  selectedPoint: Point | undefined;
+  selectedPoint?: Point | undefined;
+  typeView?: string;
 }

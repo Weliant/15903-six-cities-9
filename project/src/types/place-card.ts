@@ -4,5 +4,5 @@ export type PlaceCardProps = {
   offer: Offer;
   activeCard?: boolean;
   typeView?: string;
-  onCardPlaceHover: (offerId: number) => void;
+  onCardPlaceHover: (offerId: number | null) => void;
 }
