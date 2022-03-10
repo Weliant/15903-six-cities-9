@@ -10,6 +10,7 @@ import { reviews } from '../../mocks/reviews';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import Map from '../../components/map/map';
 import OfferList from '../../components/offer-list/offer-list';
+import { Point } from '../../types/cities';
 
 function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element {
   const { id } = useParams();
@@ -19,6 +20,13 @@ function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element 
   const ratingPercent = getRatingOffer(offer.rating);
   const images = getOfferImages(offer);
   const offerNeighbourhood = getOfferNeighbourhood(offers, id) as Offer[];
+
+  const currentPoint: Point = {
+    id: offer.id,
+    latitude: offer.location.latitude,
+    longitude: offer.location.longitude,
+    zoom: offer.location.zoom,
+  };
 
   const isAuth = authorizationStatus === AuthorizationStatus.Auth;
 
@@ -128,7 +136,13 @@ function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element 
             <ReviewsList reviews={reviews} isAuth={isAuth}/>
           </div>
         </div>
-        <Map height={MapSize.Height} width={MapSize.Width} city={offer.city} points={offerNeighbourhood} style={styleMap} />
+        <Map height={MapSize.Height}
+          width={MapSize.Width}
+          city={offer.city}
+          points={offers}
+          style={styleMap}
+          selectedPoint={currentPoint}
+        />
       </section>
       <div className="container">
         <section className="near-places places">

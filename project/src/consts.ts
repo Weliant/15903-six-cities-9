@@ -3,6 +3,7 @@ export const Setting = {
 };
 
 export const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+export const CITY_DEFAULT = 'Paris';
 
 export enum AppRoute {
   Root = '/',

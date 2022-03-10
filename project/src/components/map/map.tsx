@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react';
-import leaflet, {Marker} from 'leaflet';
+import leaflet, {LatLngLiteral, Marker} from 'leaflet';
 import cn from 'classnames';
 import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/useMap';
@@ -8,7 +8,7 @@ import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../consts';
 
 function Map({height, width, style, city, points, selectedPoint, typeView}: MapProp) : JSX.Element {
   const mapRef = useRef(null);
-  const map = useMap(mapRef, city);
+  const {map, layerGroup} = useMap(mapRef, city);
   const styleSize = {height: `${height}px`, width: `${width ? width : 'auto'}px`};
   const styleMap = style ? {...style, ...styleSize} : styleSize;
 
@@ -25,13 +25,13 @@ function Map({height, width, style, city, points, selectedPoint, typeView}: MapP
   });
 
   useEffect(() => {
-    if (map) {
-      map.clearLayers();
+    if (layerGroup) {
+      layerGroup.clearLayers();
       points.forEach((point) => {
         const marker = new Marker({
           lat: point.location.latitude,
           lng: point.location.longitude,
-        });
+        } as leaflet.LatLngExpression);
 
         marker
           .setIcon(
@@ -39,10 +39,19 @@ function Map({height, width, style, city, points, selectedPoint, typeView}: MapP
               ? currentCustomIcon
               : defaultCustomIcon,
           )
-          .addTo(map);
+          .addTo(layerGroup);
       });
     }
-  }, [currentCustomIcon, defaultCustomIcon, map, points, selectedPoint]);
+    if (map) {
+      const coordinateCity:LatLngLiteral = {
+        lat: Number(city?.location.latitude),
+        lng: Number(city?.location.longitude),
+      };
+
+      map.panTo(coordinateCity);
+      map.setZoom(Number(city?.location.zoom));
+    }
+  }, [city?.location.latitude, city?.location.longitude, city?.location.zoom, currentCustomIcon, defaultCustomIcon, layerGroup, map, points, selectedPoint]);
 
   return (
     <section
