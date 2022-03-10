@@ -14,5 +14,7 @@ export const getOfferImages = (offer: Offer) => offer.images.length > COUNT_IMAG
 
 export const getOfferNeighbourhood = (offers: Offer[], id: string | undefined) => offers.filter((item) => item.id !== Number(id)).slice(0, 3);
 
-export const getOffersByCity = (city: string, offers: Offer[]) => offers.filter((item) => item.city.name === city);
+export const getOffersByCity = (city: string | undefined, offers: Offer[]) => offers.filter((item) => item.city.name === city);
+
+export const getDataByCity = (city: string | undefined, offers: Offer[]) => offers.find((item) => item.city.name === city);
 

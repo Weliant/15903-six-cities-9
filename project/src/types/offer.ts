@@ -6,9 +6,9 @@ export type HostOffer = {
 };
 
 export type LocationOffer = {
-  latitude: number;
-  longitude: number;
-  zoom: number;
+  latitude: number | null;
+  longitude: number | null;
+  zoom: number | null;
 };
 
 export type CityOffer = {

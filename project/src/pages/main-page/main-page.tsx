@@ -1,23 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MainPageProps } from './main-page-types';
-import { AppRoute, CITIES } from '../../consts';
+import { AppRoute, CITIES, CITY_DEFAULT } from '../../consts';
 import { getCapitalizeFirstLetter } from '../../utils/common';
 import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
 import { Point } from '../../types/cities';
 import { Offer } from '../../types/offer';
-import { getOffer, getOffersByCity } from '../../utils/offer';
+import { getDataByCity, getOffer, getOffersByCity } from '../../utils/offer';
+import CitiesList from './../../components/cities-list/cities-list';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { changeCityAction, changeDataCityAction, getOffersAction } from '../../store/action';
 
 function MainPage({offers}: MainPageProps) : JSX.Element {
-  const [active, setActive] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
   const citiesRef = useRef<null | HTMLDivElement>(null);
+  const activeCityName = useAppSelector((state) => state.cityName);
+  const activeCityData = useAppSelector((state) => state.city);
+  const offersByCity = useAppSelector((state) => state.offersList);
+  const dispatch = useAppDispatch();
 
   const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(undefined);
   const [height, setHeight] = useState(0);
-  const offersByCity = getOffersByCity(active, offers) as Offer[];
 
   const onListItemHover = (offerId: number | null) => {
     if (offerId) {
@@ -41,9 +46,16 @@ function MainPage({offers}: MainPageProps) : JSX.Element {
 
     if (location.hash) {
       const city = getCapitalizeFirstLetter(location.hash.slice(1));
-      setActive(city);
+      dispatch(changeCityAction(city));
+      const offersByCityNew = getOffersByCity(city, offers) as Offer[] | null;
+      dispatch(getOffersAction(offersByCityNew));
+
+      if (offersByCityNew) {
+        const activeCityDataNew = getDataByCity(city, offersByCityNew) as Offer | null;
+        dispatch(changeDataCityAction(activeCityDataNew?.city));
+      }
     } else {
-      navigate(`${AppRoute.Root}#${CITIES[0].toLowerCase()}`, { replace: true });
+      navigate(`${AppRoute.Root}#${CITY_DEFAULT.toLowerCase()}`, { replace: true });
     }
 
 
@@ -51,28 +63,14 @@ function MainPage({offers}: MainPageProps) : JSX.Element {
       setHeight(refElement.offsetHeight);
     }
 
-  }, [location, navigate, citiesRef]);
+  }, [location, navigate, citiesRef, dispatch, offers]);
 
   return (
     <main className={`page__main page__main--index ${!offersByCity?.length && 'page__main--index-empty'}`}>
       <h1 className="visually-hidden">Cities</h1>
       <div className="tabs">
         <section className="locations container">
-          <ul className="locations__list tabs__list">
-            {
-              CITIES.map((city) => {
-                const keyValue = `${city}`;
-
-                return (
-                  <li key={keyValue} className="locations__item">
-                    <a className={`locations__item-link tabs__item ${ active === city ?'tabs__item--active': ''}`} href={`#${city.toLowerCase()}`}>
-                      <span>{city}</span>
-                    </a>
-                  </li>
-                );
-              })
-            }
-          </ul>
+          <CitiesList cities={CITIES} active={activeCityName}/>
         </section>
       </div>
       { offersByCity?.length ?
@@ -80,7 +78,7 @@ function MainPage({offers}: MainPageProps) : JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offersByCity.length} places to stay in {active}</b>
+              <b className="places__found">{offersByCity.length} places to stay in {activeCityName}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -89,7 +87,7 @@ function MainPage({offers}: MainPageProps) : JSX.Element {
                     <use xlinkHref="#icon-arrow-select"></use>
                   </svg>
                 </span>
-                <ul className="places__options places__options--custom places__options--opened">
+                <ul className="places__options places__options--custom">
                   <li className="places__option places__option--active" tabIndex={0}>Popular</li>
                   <li className="places__option" tabIndex={0}>Price: low to high</li>
                   <li className="places__option" tabIndex={0}>Price: high to low</li>
@@ -99,7 +97,7 @@ function MainPage({offers}: MainPageProps) : JSX.Element {
               <OfferList offers={offersByCity} onListItemHover={onListItemHover} typeView={'city'}/>
             </section>
             <div className="cities__right-section">
-              <Map height={height} city={offersByCity[0].city} points={offersByCity} selectedPoint={selectedPoint} typeView='city'/>
+              <Map height={height} city={activeCityData} points={offersByCity} selectedPoint={selectedPoint} typeView='city'/>
             </div>
           </div>
         </div>
