@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
-import { offers } from './mocks/offers';
-import { Setting } from './consts';
 import { store } from './store';
 import { Provider } from 'react-redux';
+import ErrorMessage from './components/error-message/errorMessage';
+import { fetchOffersAction } from './store/api-action';
+
+store.dispatch(fetchOffersAction());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>
-      <App adsCount = {Setting.ADS_COUNT} offers={offers} />
+      <ErrorMessage />
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'));

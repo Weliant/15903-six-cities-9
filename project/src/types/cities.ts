@@ -15,13 +15,13 @@ export type MapProp = {
   height: number;
   width?: number;
   style?: Style;
-  city: CityOffer | undefined;
-  points: Offer[];
-  selectedPoint?: Point | undefined;
+  city?: CityOffer;
+  points?: Offer[];
+  selectedPoint?: Point;
   typeView?: string;
 }
 
 export type Cities = {
   cities: string[],
-  active: string | undefined,
+  active?: string,
 }

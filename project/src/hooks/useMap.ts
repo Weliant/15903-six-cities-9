@@ -9,7 +9,7 @@ type MapProp = {
 
 function useMap(
   mapRef: MutableRefObject<HTMLElement | null>,
-  city: CityOffer | undefined,
+  city?: CityOffer,
 ): MapProp {
   const [map, setMap] = useState<Map | null>(null);
   const [layerGroup, setLayerGroup] = useState<LayerGroup | null>(null);
@@ -25,10 +25,10 @@ function useMap(
         },
         zoom: city?.location.zoom,
         zoomControl: false,
-      } as leaflet.MapOptions | undefined);
+      } as leaflet.MapOptions);
 
       const layer = new TileLayer(
-        'https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/water/EPSG:3857/{z}/{x}/{y}.png',
+        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
       );
 
       instance.addLayer(layer);

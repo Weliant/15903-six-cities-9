@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MainPageProps } from './main-page-types';
 import { AppRoute, CITIES, CITY_DEFAULT } from '../../consts';
 import { getCapitalizeFirstLetter } from '../../utils/common';
 import OfferList from '../../components/offer-list/offer-list';
@@ -10,15 +9,16 @@ import { Offer } from '../../types/offer';
 import { getDataByCity, getOffer, getOffersByCity } from '../../utils/offer';
 import CitiesList from './../../components/cities-list/cities-list';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { changeCityAction, changeDataCityAction, getOffersAction } from '../../store/action';
+import { changeDataCityAction, getOffersByCityAction } from '../../store/action';
 
-function MainPage({offers}: MainPageProps) : JSX.Element {
+function MainPage() : JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
   const citiesRef = useRef<null | HTMLDivElement>(null);
-  const activeCityName = useAppSelector((state) => state.cityName);
   const activeCityData = useAppSelector((state) => state.city);
-  const offersByCity = useAppSelector((state) => state.offersList);
+  const activeCityName = useAppSelector((state) => state.city?.name);
+  const offers = useAppSelector((state) => state.offers);
+  const offersByCity = useAppSelector((state) => state.offersByCity);
   const dispatch = useAppDispatch();
 
   const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(undefined);
@@ -46,12 +46,11 @@ function MainPage({offers}: MainPageProps) : JSX.Element {
 
     if (location.hash) {
       const city = getCapitalizeFirstLetter(location.hash.slice(1));
-      dispatch(changeCityAction(city));
-      const offersByCityNew = getOffersByCity(city, offers) as Offer[] | null;
-      dispatch(getOffersAction(offersByCityNew));
+      const offersByCityNew = getOffersByCity(offers, city);
+      dispatch(getOffersByCityAction(offersByCityNew));
 
       if (offersByCityNew) {
-        const activeCityDataNew = getDataByCity(city, offersByCityNew) as Offer | null;
+        const activeCityDataNew = getDataByCity(offersByCityNew, city);
         dispatch(changeDataCityAction(activeCityDataNew?.city));
       }
     } else {

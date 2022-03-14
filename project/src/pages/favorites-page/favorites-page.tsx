@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import { FavoritesPageProps } from './favorites-page-types';
 import { getListOffersFavorites } from '../../utils/favorites';
 import PlaceCard from '../../components/place-card/place-card';
+import { useAppSelector } from '../../hooks';
 
-function FavoritesPage({offers}: FavoritesPageProps) : JSX.Element {
+function FavoritesPage() : JSX.Element {
+  const { offers } = useAppSelector((state) => state);
   const listOffersFavorites = getListOffersFavorites(offers);
 
   return (
