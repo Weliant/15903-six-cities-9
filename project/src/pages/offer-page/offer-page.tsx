@@ -11,10 +11,12 @@ import ReviewsList from '../../components/reviews-list/reviews-list';
 import Map from '../../components/map/map';
 import OfferList from '../../components/offer-list/offer-list';
 import { Point } from '../../types/cities';
+import { useAppSelector } from '../../hooks';
 
-function OfferPage({offers, authorizationStatus}: OfferPageProps) : JSX.Element {
+function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { offers } = useAppSelector((state) => state);
 
   const offer: Offer = getOffer(offers, id) as Offer;
   const ratingPercent = getRatingOffer(offer.rating);

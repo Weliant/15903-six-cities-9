@@ -1,7 +1,3 @@
-export const Setting = {
-  ADS_COUNT: 5,
-};
-
 export const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 export const CITY_DEFAULT = 'Paris';
 
@@ -35,4 +31,23 @@ export const URL_MARKER_CURRENT = '../img/pin-active.svg';
 export enum MapSize {
   Width = 1144,
   Height = 580,
+}
+
+export enum APIRoute {
+  Hotels = '/hotels',
+  Offer = '/hotels/{hotelId}',
+  OffersNearby = '/hotels/{hotelId}/nearby',
+  Favorite = '/favorite',
+  FavoriteEdit = '/favorite/{hotelId}/{status}',
+  Comments = '/comments/{hotelId}',
+  Login = '/login',
+  Logout = '/logout',
+}
+
+export const TIMEOUT_SHOW_ERROR = 2000;
+
+export enum HTTP_CODE {
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  NOT_FOUND = 404,
 }

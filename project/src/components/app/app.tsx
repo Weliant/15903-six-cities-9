@@ -6,29 +6,36 @@ import FavoritesPage from '../../pages/favorites-page/favorites-page';
 import LoginPage from '../../pages/login-page/login-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import PrivateRoute from '../private-route/private-route';
-import { AppRoute, AuthorizationStatus } from '../../consts';
-import { AppPageProps } from './app-types';
+import { AppRoute } from '../../consts';
+import { useAppSelector } from '../../hooks';
+import Spinner from './../spinner/spinner';
 
-function App({adsCount, offers}: AppPageProps): JSX.Element {
-  const auth = AuthorizationStatus.Auth;
+function App(): JSX.Element {
+  const {authorizationStatus, isDataLoaded} = useAppSelector((state) => state);
+
+  if (!isDataLoaded) {
+    return (
+      <Spinner />
+    );
+  }
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={AppRoute.Root} element={<Layout authorizationStatus={auth} />}>
+        <Route path={AppRoute.Root} element={<Layout authorizationStatus={authorizationStatus} />}>
           <Route
             index
-            element={<MainPage adsCount={adsCount} offers={offers}/>}
+            element={<MainPage />}
           />
           <Route
             path={AppRoute.Room}
-            element={<OfferPage authorizationStatus={auth} offers={offers}/>}
+            element={<OfferPage authorizationStatus={authorizationStatus} />}
           />
           <Route
             path={AppRoute.Favorites}
             element={
-              <PrivateRoute authorizationStatus={auth}>
-                <FavoritesPage offers={offers} />
+              <PrivateRoute authorizationStatus={authorizationStatus}>
+                <FavoritesPage />
               </PrivateRoute>
             }
           />

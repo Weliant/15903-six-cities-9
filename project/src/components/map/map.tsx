@@ -27,20 +27,23 @@ function Map({height, width, style, city, points, selectedPoint, typeView}: MapP
   useEffect(() => {
     if (layerGroup) {
       layerGroup.clearLayers();
-      points.forEach((point) => {
-        const marker = new Marker({
-          lat: point.location.latitude,
-          lng: point.location.longitude,
-        } as leaflet.LatLngExpression);
 
-        marker
-          .setIcon(
-            selectedPoint !== undefined && point.id === selectedPoint.id
-              ? currentCustomIcon
-              : defaultCustomIcon,
-          )
-          .addTo(layerGroup);
-      });
+      if (points?.length) {
+        points.forEach((point) => {
+          const marker = new Marker({
+            lat: point.location.latitude,
+            lng: point.location.longitude,
+          } as leaflet.LatLngExpression);
+
+          marker
+            .setIcon(
+              selectedPoint !== undefined && point.id === selectedPoint.id
+                ? currentCustomIcon
+                : defaultCustomIcon,
+            )
+            .addTo(layerGroup);
+        });
+      }
     }
     if (map) {
       const coordinateCity:LatLngLiteral = {
