@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
+import { AuthorizationStatus } from '../consts';
 import { Offer } from '../types/offer';
 
 export const Action = {
@@ -7,8 +8,9 @@ export const Action = {
 };
 
 export const changeDataCityAction = createAction(Action.CHANGE_DATA_CITY, (value) => ({ payload: value }));
-export const getOffersByCityAction = createAction(Action.GET_OFFERS_BY_CITY, (value) => ({ payload: value }));
 
 export const loadOffers = createAction<Offer[]>('data/loadOffers');
 
 export const setError = createAction<string>('load/setError');
+
+export const requireAuthorization = createAction<AuthorizationStatus>('user/requireAuthorization');

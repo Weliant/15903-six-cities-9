@@ -5,7 +5,6 @@ import { CityOffer, Offer } from './offer.js';
 export type StateInit = {
   city?: CityOffer,
   offers?: Offer[],
-  offersByCity?: Offer[],
   authorizationStatus: AuthorizationStatus,
   isDataLoaded: boolean,
   error: string,

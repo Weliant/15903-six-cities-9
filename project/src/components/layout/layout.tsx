@@ -1,11 +1,12 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import { LayoutProps } from '../../types/layout';
 import Header from '../../components/header/header';
-import { AppRoute, AuthorizationStatus } from '../../consts';
+import { AppRoute } from '../../consts';
+import { isCheckedAuth } from '../../utils/auth';
 
 function Layout (props: LayoutProps): JSX.Element {
   const {authorizationStatus} = props;
-  const isAuth = authorizationStatus === AuthorizationStatus.Auth;
+  const isAuth = isCheckedAuth(authorizationStatus);
   const location = useLocation();
   let isLoginPage = false;
   let stylePage = 'page';

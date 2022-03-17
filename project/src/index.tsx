@@ -4,9 +4,6 @@ import App from './components/app/app';
 import { store } from './store';
 import { Provider } from 'react-redux';
 import ErrorMessage from './components/error-message/errorMessage';
-import { fetchOffersAction } from './store/api-action';
-
-store.dispatch(fetchOffersAction());
 
 ReactDOM.render(
   <React.StrictMode>
