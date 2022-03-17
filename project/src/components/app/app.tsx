@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from '../layout/layout';
 import MainPage from '../../pages/main-page/main-page';
@@ -9,9 +10,16 @@ import PrivateRoute from '../private-route/private-route';
 import { AppRoute } from '../../consts';
 import { useAppSelector } from '../../hooks';
 import Spinner from './../spinner/spinner';
+import { checkAuthAction, fetchOffersAction } from '../../store/api-action';
+import { store } from '../../store';
 
 function App(): JSX.Element {
   const {authorizationStatus, isDataLoaded} = useAppSelector((state) => state);
+
+  useEffect(() => {
+    store.dispatch(checkAuthAction());
+    store.dispatch(fetchOffersAction());
+  }, [authorizationStatus]);
 
   if (!isDataLoaded) {
     return (
@@ -34,7 +42,7 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.Favorites}
             element={
-              <PrivateRoute authorizationStatus={authorizationStatus}>
+              <PrivateRoute>
                 <FavoritesPage />
               </PrivateRoute>
             }

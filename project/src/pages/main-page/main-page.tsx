@@ -9,7 +9,7 @@ import { Offer } from '../../types/offer';
 import { getDataByCity, getOffer, getOffersByCity } from '../../utils/offer';
 import CitiesList from './../../components/cities-list/cities-list';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { changeDataCityAction, getOffersByCityAction } from '../../store/action';
+import { changeDataCityAction } from '../../store/action';
 
 function MainPage() : JSX.Element {
   const location = useLocation();
@@ -18,11 +18,11 @@ function MainPage() : JSX.Element {
   const activeCityData = useAppSelector((state) => state.city);
   const activeCityName = useAppSelector((state) => state.city?.name);
   const offers = useAppSelector((state) => state.offers);
-  const offersByCity = useAppSelector((state) => state.offersByCity);
   const dispatch = useAppDispatch();
 
   const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(undefined);
   const [height, setHeight] = useState(0);
+  const [offersByCity, setOffersByCity] = useState<Offer[] | undefined>(undefined);
 
   const onListItemHover = (offerId: number | null) => {
     if (offerId) {
@@ -47,7 +47,7 @@ function MainPage() : JSX.Element {
     if (location.hash) {
       const city = getCapitalizeFirstLetter(location.hash.slice(1));
       const offersByCityNew = getOffersByCity(offers, city);
-      dispatch(getOffersByCityAction(offersByCityNew));
+      setOffersByCity(offersByCityNew);
 
       if (offersByCityNew) {
         const activeCityDataNew = getDataByCity(offersByCityNew, city);

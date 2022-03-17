@@ -1,3 +1,5 @@
+import { User } from './user';
+
 export type HostOffer = {
   id: number,
   name: string,
@@ -33,13 +35,6 @@ export type Offer = {
   description: string,
   location: LocationOffer,
   id: number,
-}
-
-export type User = {
-  avatarUrl: string,
-  id: number,
-  isPro: boolean,
-  name: string,
 }
 
 export type ReviewOffer = {
