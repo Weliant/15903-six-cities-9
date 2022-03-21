@@ -1,10 +1,10 @@
 import { CityOffer, Offer } from './offer';
 
 export type Point = {
-  id: number;
-  latitude: number | null;
-  longitude: number | null;
-  zoom: number | null;
+  id?: number;
+  latitude?: number | null;
+  longitude?: number | null;
+  zoom?: number | null;
 };
 
 export type Style = {

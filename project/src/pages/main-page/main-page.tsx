@@ -9,7 +9,7 @@ import { Offer } from '../../types/offer';
 import { getDataByCity, getOffer, getOffersByCity } from '../../utils/offer';
 import CitiesList from './../../components/cities-list/cities-list';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { changeDataCityAction } from '../../store/action';
+import { changeDataCityAction, loadOfferById } from '../../store/action';
 
 function MainPage() : JSX.Element {
   const location = useLocation();
@@ -53,6 +53,8 @@ function MainPage() : JSX.Element {
         const activeCityDataNew = getDataByCity(offersByCityNew, city);
         dispatch(changeDataCityAction(activeCityDataNew?.city));
       }
+
+      dispatch(loadOfferById(undefined));
     } else {
       navigate(`${AppRoute.Root}#${CITY_DEFAULT.toLowerCase()}`, { replace: true });
     }

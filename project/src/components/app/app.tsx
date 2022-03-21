@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Layout from '../layout/layout';
 import MainPage from '../../pages/main-page/main-page';
 import OfferPage from '../../pages/offer-page/offer-page';
@@ -12,6 +12,8 @@ import { useAppSelector } from '../../hooks';
 import Spinner from './../spinner/spinner';
 import { checkAuthAction, fetchOffersAction } from '../../store/api-action';
 import { store } from '../../store';
+import HistoryRouter from '../history-router/history-router';
+import browserHistory from '../../routes/browser-history';
 
 function App(): JSX.Element {
   const {authorizationStatus, isDataLoaded} = useAppSelector((state) => state);
@@ -28,7 +30,7 @@ function App(): JSX.Element {
   }
 
   return (
-    <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <Routes>
         <Route path={AppRoute.Root} element={<Layout authorizationStatus={authorizationStatus} />}>
           <Route
@@ -57,7 +59,7 @@ function App(): JSX.Element {
           />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
   );
 }
 
