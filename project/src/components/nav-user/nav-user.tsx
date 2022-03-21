@@ -1,4 +1,4 @@
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AppRoute } from '../../consts';
 import { useAppDispatch } from '../../hooks';
 import { logoutAction } from '../../store/api-action';
@@ -10,8 +10,6 @@ function NavUser(props: HeaderProps) : JSX.Element {
 
   const handleSignInClick = () => {
     dispatch(logoutAction());
-
-    return <Navigate to={AppRoute.Login} />;
   };
 
   return (

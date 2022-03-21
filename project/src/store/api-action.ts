@@ -1,22 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios, { AxiosResponse } from 'axios';
 import { api, store } from '.';
-import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../consts';
+import { APIRoute, AppRoute, AuthorizationStatus } from '../consts';
 import { errorHandle } from '../services/error-handle';
 import { dropToken, saveToken } from '../services/token';
 import { Auth } from '../types/auth';
-import { Offer } from '../types/offer';
+import { Offer, IReviewOffer, ReviewOfferSmall } from '../types/offer';
 import { User } from '../types/user';
-import { loadOffers, requireAuthorization, setError } from './action';
-
-export const clearErrorAction = createAsyncThunk(
-  'load/clearError',
-  () => {
-    setTimeout(
-      () => store.dispatch(setError('')),
-      TIMEOUT_SHOW_ERROR,
-    );
-  },
-);
+import { loading, loadingReview, loadOfferById, loadOffers, loadOffersNearBy, loadReviews, redirectToRoute, requireAuthorization, errorReview } from './action';
 
 export const fetchOffersAction = createAsyncThunk(
   'data/fetchOffers',
@@ -26,6 +17,52 @@ export const fetchOffersAction = createAsyncThunk(
       store.dispatch(loadOffers(data));
     } catch (error) {
       errorHandle(error);
+    }
+  },
+);
+
+export const fetchOfferByIdAction = createAsyncThunk(
+  'data/fetchOfferById',
+  async (idOffer: string | undefined) => {
+    if (idOffer) {
+      store.dispatch(loading(false));
+
+      const fetchOfferById = (id: string | undefined) => api.get<Offer>(`${APIRoute.Hotels}/${id}`);
+      const fetchOfferNearby = (id: string | undefined) => api.get<Offer[]>(`${APIRoute.Hotels}/${id}/${APIRoute.OfferNearby}`);
+      const fetchOfferComments = (id: string | undefined) => api.get<IReviewOffer[]>(`${APIRoute.Comments}/${id}`);
+
+      try {
+        const responses = await axios.all<AxiosResponse<Offer> | AxiosResponse<Offer[]> | AxiosResponse<IReviewOffer[]>>([fetchOfferById(idOffer), fetchOfferNearby(idOffer), fetchOfferComments(idOffer)]);
+
+        store.dispatch(loadOfferById(responses[0].data as Offer));
+        store.dispatch(loadOffersNearBy(responses[1].data as Offer[]));
+        store.dispatch(loadReviews(responses[2].data as IReviewOffer[]));
+        store.dispatch(loading(true));
+      } catch(error) {
+        errorHandle(error);
+
+        store.dispatch(loadOfferById(null));
+        store.dispatch(loading(true));
+      }
+    }
+  },
+);
+
+export const submitReviewAction = createAsyncThunk(
+  'data/commentAdd',
+  async ({comment, rating, idOffer}: ReviewOfferSmall) => {
+    store.dispatch(errorReview(false));
+    store.dispatch(loadingReview(false));
+
+    try {
+      const {data} = await api.post<IReviewOffer[]>(`${APIRoute.Comments}/${idOffer}`, {comment, rating});
+
+      store.dispatch(loadReviews(data));
+      store.dispatch(loadingReview(true));
+    } catch (error) {
+      errorHandle(error);
+      store.dispatch(errorReview(true));
+      store.dispatch(loadingReview(true));
     }
   },
 );
@@ -50,6 +87,7 @@ export const loginAction = createAsyncThunk(
       const {data: {token}} = await api.post<User>(APIRoute.Login, {email, password});
       saveToken(token);
       store.dispatch(requireAuthorization(AuthorizationStatus.Auth));
+      store.dispatch(redirectToRoute(AppRoute.Root));
     } catch (error) {
       errorHandle(error);
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
@@ -64,6 +102,7 @@ export const logoutAction = createAsyncThunk(
       await api.delete(APIRoute.Logout);
       dropToken();
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+      store.dispatch(redirectToRoute(AppRoute.Login));
     } catch (error) {
       errorHandle(error);
     }

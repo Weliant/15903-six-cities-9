@@ -1,12 +1,5 @@
 import { User } from './user';
 
-export type HostOffer = {
-  id: number,
-  name: string,
-  isPro: boolean,
-  avatarUrl: string,
-};
-
 export type LocationOffer = {
   latitude: number | null;
   longitude: number | null;
@@ -25,28 +18,32 @@ export type Offer = {
   title: string,
   isFavorite: boolean,
   isPremium: boolean,
-  rating: number,
+  rating?: number,
   type: string,
   bedrooms: number,
   maxAdults: number,
   price: number,
   goods: string[],
-  host: HostOffer,
+  host: User,
   description: string,
   location: LocationOffer,
   id: number,
 }
 
-export type ReviewOffer = {
+export type ReviewOfferSmall = {
   comment: string,
-  date: string,
-  id: number,
   rating: number,
-  user: User,
+  idOffer?: number,
 };
 
+export interface IReviewOffer extends ReviewOfferSmall {
+  date?: string,
+  id: number,
+  user?: User,
+}
+
 export type OfferListProp = {
-  offers: Offer[];
+  offers?: Offer[];
   onListItemHover: (offerId: number | null) => void;
   typeView?: string;
 }

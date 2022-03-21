@@ -1,4 +1,4 @@
-import { ReviewOffer } from './offer';
+import { IReviewOffer } from './offer';
 
 export type FormComment = {
   rating: string;
@@ -6,10 +6,13 @@ export type FormComment = {
 };
 
 export type ReviewFormProp = {
-  sendReview: (rating: string, comment: string) => void;
+  sendReview: (comment: string, rating: number) => void;
+  error: boolean;
+  isLoaded: boolean;
 }
 
 export type ReviewsListProp = {
-  reviews: ReviewOffer[];
+  reviews?: IReviewOffer[];
   isAuth: boolean;
+  idOffer?: number;
 }

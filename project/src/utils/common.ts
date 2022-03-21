@@ -1,4 +1,4 @@
-export const getCapitalizeFirstLetter = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
+export const getCapitalizeFirstLetter = (word?: string) => word && word.charAt(0).toUpperCase() + word.slice(1);
 
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
 export const getRandomInteger = (a = 0, b = 1) => {

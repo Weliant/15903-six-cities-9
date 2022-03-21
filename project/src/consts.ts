@@ -35,16 +35,13 @@ export enum MapSize {
 
 export enum APIRoute {
   Hotels = '/hotels',
-  Offer = '/hotels/{hotelId}',
-  OffersNearby = '/hotels/{hotelId}/nearby',
+  OfferNearby = 'nearby',
   Favorite = '/favorite',
   FavoriteEdit = '/favorite/{hotelId}/{status}',
-  Comments = '/comments/{hotelId}',
+  Comments = '/comments',
   Login = '/login',
   Logout = '/logout',
 }
-
-export const TIMEOUT_SHOW_ERROR = 2000;
 
 export enum HTTP_CODE {
   BAD_REQUEST = 400,
