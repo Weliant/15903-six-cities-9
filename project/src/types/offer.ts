@@ -18,7 +18,7 @@ export type Offer = {
   title: string,
   isFavorite: boolean,
   isPremium: boolean,
-  rating?: number,
+  rating: number,
   type: string,
   bedrooms: number,
   maxAdults: number,
@@ -46,4 +46,10 @@ export type OfferListProp = {
   offers?: Offer[];
   onListItemHover: (offerId: number | null) => void;
   typeView?: string;
+}
+
+export type Filter = {
+  id: number;
+  name: string;
+  type: string;
 }

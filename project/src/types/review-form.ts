@@ -16,3 +16,9 @@ export type ReviewsListProp = {
   isAuth: boolean;
   idOffer?: number;
 }
+
+export type RatingProp = {
+  sendRating: (rating: string) => void;
+  disable: boolean;
+  value: number;
+}

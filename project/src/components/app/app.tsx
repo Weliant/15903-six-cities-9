@@ -13,7 +13,8 @@ import Spinner from './../spinner/spinner';
 import { checkAuthAction, fetchOffersAction } from '../../store/api-action';
 import { store } from '../../store';
 import HistoryRouter from '../history-router/history-router';
-import browserHistory from '../../routes/browser-history';
+import { ToastContainer } from 'react-toastify';
+import browserHistory from '../../services/browser-history';
 
 function App(): JSX.Element {
   const {authorizationStatus, isDataLoaded} = useAppSelector((state) => state);
@@ -30,36 +31,39 @@ function App(): JSX.Element {
   }
 
   return (
-    <HistoryRouter history={browserHistory}>
-      <Routes>
-        <Route path={AppRoute.Root} element={<Layout authorizationStatus={authorizationStatus} />}>
-          <Route
-            index
-            element={<MainPage />}
-          />
-          <Route
-            path={AppRoute.Room}
-            element={<OfferPage authorizationStatus={authorizationStatus} />}
-          />
-          <Route
-            path={AppRoute.Favorites}
-            element={
-              <PrivateRoute>
-                <FavoritesPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={AppRoute.Login}
-            element={<LoginPage />}
-          />
-          <Route
-            path="*"
-            element={<NotFoundPage/>}
-          />
-        </Route>
-      </Routes>
-    </HistoryRouter>
+    <>
+      <ToastContainer />
+      <HistoryRouter history={browserHistory}>
+        <Routes>
+          <Route path={AppRoute.Root} element={<Layout authorizationStatus={authorizationStatus} />}>
+            <Route
+              index
+              element={<MainPage />}
+            />
+            <Route
+              path={AppRoute.Room}
+              element={<OfferPage authorizationStatus={authorizationStatus} />}
+            />
+            <Route
+              path={AppRoute.Favorites}
+              element={
+                <PrivateRoute>
+                  <FavoritesPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={AppRoute.Login}
+              element={<LoginPage />}
+            />
+            <Route
+              path="*"
+              element={<NotFoundPage/>}
+            />
+          </Route>
+        </Routes>
+      </HistoryRouter>
+    </>
   );
 }
 
