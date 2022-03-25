@@ -13,15 +13,16 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useEffect, useState } from 'react';
 import { fetchOfferByIdAction } from '../../store/api-action';
 import NotFoundPage from '../not-found-page/not-found-page';
+import { Offer } from '../../types/offer';
 
 function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { offers } = useAppSelector((state) => state);
   const { offer } = useAppSelector((state) => state);
   const { nearby } = useAppSelector((state) => state);
   const { reviews } = useAppSelector((state) => state);
   const [initError, setInitError] = useState<boolean>(false);
+  const [offers, setOffers] = useState<Offer[]>([]);
 
   const ratingPercent = getRatingOffer(offer?.rating);
   const images = getOfferImages(offer);
@@ -65,7 +66,19 @@ function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
       }
     }
 
-  }, [dispatch, id, offer]);
+    let list: Offer[] = [];
+
+    if (offer && offer !== null) {
+      list = [offer];
+    }
+
+    if (nearby?.length) {
+      list = [...list, ...nearby];
+    }
+
+    setOffers(list);
+
+  }, [dispatch, id, nearby, offer]);
 
   return(
     <>

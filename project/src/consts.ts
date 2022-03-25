@@ -1,3 +1,5 @@
+import { Filter } from './types/offer';
+
 export const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 export const CITY_DEFAULT = 'Paris';
 
@@ -48,3 +50,17 @@ export enum HTTP_CODE {
   UNAUTHORIZED = 401,
   NOT_FOUND = 404,
 }
+
+export enum Filters {
+  Popular = 'popular',
+  Low = 'low',
+  Hight = 'hight',
+  Rating = 'rating',
+}
+
+export const FILTER_LIST: Filter[] = [
+  {id: 0, name: 'Popular', type: 'popular'},
+  {id: 1, name: 'Price: low to high', type: 'low'},
+  {id: 2, name: 'Price: high to low', type: 'hight'},
+  {id: 3, name: 'Top rated first', type: 'rating'},
+];

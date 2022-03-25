@@ -1,5 +1,5 @@
 import { Middleware } from 'redux';
-import browserHistory from '../routes/browser-history';
+import browserHistory from '../services/browser-history';
 import { reducer } from '../store/reducer';
 
 type Reducer = ReturnType<typeof reducer>;

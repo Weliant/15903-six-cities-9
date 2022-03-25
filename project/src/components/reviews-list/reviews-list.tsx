@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { submitReviewAction } from '../../store/api-action';
-import { IReviewOffer, ReviewOfferSmall } from '../../types/offer';
+import { ReviewOfferSmall } from '../../types/offer';
 import { ReviewsListProp } from '../../types/review-form';
 import { getRatingOffer } from '../../utils/card';
 import { getFormattedDate, sortReviews } from '../../utils/offer';
@@ -9,7 +9,7 @@ import ReviewForm from '../review-form/review-form';
 function ReviewsList({reviews, isAuth, idOffer}: ReviewsListProp) : JSX.Element {
   const dispatch = useAppDispatch();
 
-  const reviewsNewList: IReviewOffer[] = reviews ? reviews.slice().sort(sortReviews).slice(0, 10) : [];
+  const reviewsNewList = reviews ? reviews.slice().sort(sortReviews).slice(0, 10) : [];
   const { reviewStatus } = useAppSelector((state) => state);
 
   const postReview = ({comment, rating}: ReviewOfferSmall) => {
