@@ -25,12 +25,14 @@ function Map({height, width, style, city, points, selectedPoint, typeView}: MapP
   });
 
   useEffect(() => {
+    let marker;
+
     if (layerGroup) {
       layerGroup.clearLayers();
 
       if (points?.length) {
         points.forEach((point) => {
-          const marker = new Marker({
+          marker = new Marker({
             lat: point.location.latitude,
             lng: point.location.longitude,
           } as leaflet.LatLngExpression);

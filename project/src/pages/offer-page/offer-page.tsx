@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import cn from 'classnames';
 import { OfferPageProps } from './offer-page-types';
 import { AppRoute, AuthorizationStatus, MapSize } from '../../consts';
@@ -14,13 +14,15 @@ import { useEffect, useState } from 'react';
 import { fetchOfferByIdAction } from '../../store/api-action';
 import NotFoundPage from '../not-found-page/not-found-page';
 import { Offer } from '../../types/offer';
+import { getOffer, getOfferNearby, getReview } from '../../store/app-data/selectors';
 
 function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
+  const location = useLocation();
   const { id } = useParams();
   const navigate = useNavigate();
-  const { offer } = useAppSelector((state) => state);
-  const { nearby } = useAppSelector((state) => state);
-  const { reviews } = useAppSelector((state) => state);
+  const offer = useAppSelector(getOffer);
+  const nearby = useAppSelector(getOfferNearby);
+  const reviews = useAppSelector(getReview);
   const [initError, setInitError] = useState<boolean>(false);
   const [offers, setOffers] = useState<Offer[]>([]);
 
@@ -57,7 +59,7 @@ function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
   };
 
   useEffect(() => {
-    if (offer === undefined && id) {
+    if ((offer === undefined && id) || (Number(offer?.id) !== Number(id))) {
       dispatch(fetchOfferByIdAction(id));
       setInitError(false);
     } else {
@@ -78,7 +80,7 @@ function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
 
     setOffers(list);
 
-  }, [dispatch, id, nearby, offer]);
+  }, [dispatch, id, location, nearby, offer]);
 
   return(
     <>

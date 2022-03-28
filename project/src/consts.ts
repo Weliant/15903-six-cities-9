@@ -64,3 +64,8 @@ export const FILTER_LIST: Filter[] = [
   {id: 2, name: 'Price: high to low', type: 'hight'},
   {id: 3, name: 'Top rated first', type: 'rating'},
 ];
+
+export enum NameSpace {
+  data = 'DATA',
+  user = 'USER',
+}

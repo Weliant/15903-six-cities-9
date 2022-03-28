@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
 import { getListOffersFavorites } from '../../utils/favorites';
-import PlaceCard from '../../components/place-card/place-card';
 import { useAppSelector } from '../../hooks';
+import FavoritesItem from '../../components/favorites-item/favorites-item';
+import Footer from '../../components/footer/footer';
+import { getOffers } from '../../store/app-data/selectors';
 
 function FavoritesPage() : JSX.Element {
-  const { offers } = useAppSelector((state) => state);
+  const offers = useAppSelector(getOffers);
   const listOffersFavorites = getListOffersFavorites(offers);
 
   return (
@@ -20,18 +21,7 @@ function FavoritesPage() : JSX.Element {
                     const keyValue = `${favorite.name}`;
 
                     return (
-                      <li key={keyValue} className="favorites__locations-items">
-                        <div className="favorites__locations locations locations--current">
-                          <div className="locations__item">
-                            <a className="locations__item-link" href="#city">
-                              <span>{favorite.name}</span>
-                            </a>
-                          </div>
-                        </div>
-                        <div className="favorites__places">
-                          {favorite.offers.map((item) => <PlaceCard key={item.id.toString()} offer={item} typeView="favorites" onCardPlaceHover={() => false } />)}
-                        </div>
-                      </li>
+                      <FavoritesItem key={keyValue} favorite={favorite}/>
                     );
                   })
                 }
@@ -51,11 +41,7 @@ function FavoritesPage() : JSX.Element {
             </section>
           </div>
         </main>}
-      <footer className="footer container">
-        <Link className="footer__logo-link" to="/">
-          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </Link>
-      </footer>
+      <Footer />
     </>
   );
 }

@@ -15,9 +15,12 @@ import { store } from '../../store';
 import HistoryRouter from '../history-router/history-router';
 import { ToastContainer } from 'react-toastify';
 import browserHistory from '../../services/browser-history';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { getLoadedDataStatus } from '../../store/app-data/selectors';
 
 function App(): JSX.Element {
-  const {authorizationStatus, isDataLoaded} = useAppSelector((state) => state);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isDataLoaded = useAppSelector(getLoadedDataStatus);
 
   useEffect(() => {
     store.dispatch(checkAuthAction());

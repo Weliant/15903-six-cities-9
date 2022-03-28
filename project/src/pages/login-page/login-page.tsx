@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { AppRoute, CITIES } from '../../consts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-action';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { Auth } from '../../types/auth';
 import { isCheckedAuth } from '../../utils/auth';
 import { getRandomInteger } from '../../utils/common';
@@ -15,7 +16,7 @@ function LoginPage() : JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const {authorizationStatus} = useAppSelector((state) => state);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   if (isCheckedAuth(authorizationStatus)) {
     return <Navigate to={AppRoute.Root} />;
