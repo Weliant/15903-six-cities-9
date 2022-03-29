@@ -1,9 +1,4 @@
-import { Offer } from '../types/offer';
-
-type Favorite = {
-  name: string,
-  offers: Offer[],
-};
+import { Favorite, Offer } from '../types/offer';
 
 export const getListOffersFavorites = (offers?: Offer[]) => {
   const listOffersFavorites = [];

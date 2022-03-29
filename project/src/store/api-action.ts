@@ -7,7 +7,9 @@ import { dropToken, saveToken } from '../services/token';
 import { Auth } from '../types/auth';
 import { Offer, IReviewOffer, ReviewOfferSmall } from '../types/offer';
 import { User } from '../types/user';
-import { loading, loadingReview, loadOfferById, loadOffers, loadOffersNearBy, loadReviews, redirectToRoute, requireAuthorization, errorReview } from './action';
+import { redirectToRoute } from './action';
+import { errorReview, loading, loadingReview, loadOfferById, loadOffers, loadOffersNearBy, loadReviews } from './app-data/app-data';
+import { requireAuthorization } from './user-process/user-process';
 
 export const fetchOffersAction = createAsyncThunk(
   'data/fetchOffers',

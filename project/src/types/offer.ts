@@ -53,3 +53,25 @@ export type Filter = {
   name: string;
   type: string;
 }
+
+export type FilterProp = {
+  onFilterItemClick: (item: Filter) => void;
+  activeFilter?: string;
+}
+
+export type FilterItemProp = {
+  item: Filter;
+  onItemClick: (item: Filter) => void;
+  activeFilter?: string;
+}
+
+export type Favorite = {
+  name: string,
+  offers: Offer[],
+};
+
+export type FavoriteItem = {
+  favorite: Favorite;
+};
+
+
