@@ -10,6 +10,7 @@ export type ReviewStatus = {
 export type StateInit = {
   city?: CityOffer,
   offers?: Offer[],
+  favorites?: Offer[],
   offer?: Offer | null,
   nearby?: Offer[],
   reviews?: IReviewOffer[],

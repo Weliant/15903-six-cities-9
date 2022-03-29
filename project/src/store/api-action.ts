@@ -8,7 +8,17 @@ import { Auth } from '../types/auth';
 import { Offer, IReviewOffer, ReviewOfferSmall } from '../types/offer';
 import { User } from '../types/user';
 import { redirectToRoute } from './action';
-import { errorReview, loading, loadingReview, loadOfferById, loadOffers, loadOffersNearBy, loadReviews } from './app-data/app-data';
+import { errorReview,
+  loadFavoritesOffers,
+  loading,
+  loadingReview,
+  loadOfferById,
+  loadOffers,
+  loadOffersNearBy,
+  loadReviews,
+  updateFavoritesOffers,
+  updateNearBy,
+  updateOffers } from './app-data/app-data';
 import { requireAuthorization } from './user-process/user-process';
 
 export const fetchOffersAction = createAsyncThunk(
@@ -50,6 +60,44 @@ export const fetchOfferByIdAction = createAsyncThunk(
   },
 );
 
+export const fetchFavoritesOffersAction = createAsyncThunk(
+  'data/fetchFavoritesOffers',
+  async () => {
+    try {
+      const {data} = await api.get<Offer[]>(APIRoute.Favorite);
+      store.dispatch(loadFavoritesOffers(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const postOfferStatusAction = createAsyncThunk(
+  'data/offerStatus',
+  async (offerStatus: {idOffer: number | undefined, status: number, type?: string}) => {
+    store.dispatch(loading(false));
+
+    try {
+      const {data} = await api.post<Offer>(`${APIRoute.Favorite}/${offerStatus.idOffer}/${offerStatus.status}`);
+
+      if (offerStatus.type === 'city') {
+        store.dispatch(updateOffers(data));
+      } else if (offerStatus.type === 'nearby'){
+        store.dispatch(updateNearBy(data));
+      } else if (offerStatus.type === 'favorites'){
+        store.dispatch(updateFavoritesOffers(data));
+      }else {
+        store.dispatch(loadOfferById(data));
+      }
+
+      store.dispatch(loading(true));
+    } catch (error) {
+      errorHandle(error);
+      store.dispatch(loading(true));
+    }
+  },
+);
+
 export const submitReviewAction = createAsyncThunk(
   'data/commentAdd',
   async ({comment, rating, idOffer}: ReviewOfferSmall) => {
@@ -75,9 +123,11 @@ export const checkAuthAction = createAsyncThunk(
     try {
       await api.get(APIRoute.Login);
       store.dispatch(requireAuthorization(AuthorizationStatus.Auth));
+      store.dispatch(loading(true));
     } catch(error) {
       errorHandle(error);
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+      store.dispatch(loading(true));
     }
   },
 );
@@ -90,9 +140,11 @@ export const loginAction = createAsyncThunk(
       saveToken(token);
       store.dispatch(requireAuthorization(AuthorizationStatus.Auth));
       store.dispatch(redirectToRoute(AppRoute.Root));
+      store.dispatch(loading(true));
     } catch (error) {
       errorHandle(error);
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+      store.dispatch(loading(true));
     }
   },
 );
@@ -105,8 +157,11 @@ export const logoutAction = createAsyncThunk(
       dropToken();
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
       store.dispatch(redirectToRoute(AppRoute.Login));
+      store.dispatch(loading(true));
     } catch (error) {
       errorHandle(error);
+      store.dispatch(loading(true));
     }
   },
 );
+

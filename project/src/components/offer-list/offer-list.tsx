@@ -9,12 +9,13 @@ function OfferList({offers, onListItemHover, typeView}: OfferListProp) : JSX.Ele
   }, [onListItemHover]);
 
   return (
-    <div className={cn('places__list', {'cities__places-list tabs__content': typeView === 'city', 'near-places__list': !typeView} )}>
+    <div className={cn('places__list', {'cities__places-list tabs__content': typeView === 'city', 'near-places__list': typeView !== 'city'} )}>
       {offers?.map((item) => (
         <PlaceCard
           key={item.id.toString()}
           offer={item}
           onCardPlaceHover={onCardPlaceHover}
+          typeView={typeView}
         />
       ))}
     </div>

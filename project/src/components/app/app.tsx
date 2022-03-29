@@ -10,22 +10,19 @@ import PrivateRoute from '../private-route/private-route';
 import { AppRoute } from '../../consts';
 import { useAppSelector } from '../../hooks';
 import Spinner from './../spinner/spinner';
-import { checkAuthAction, fetchOffersAction } from '../../store/api-action';
+import { checkAuthAction } from '../../store/api-action';
 import { store } from '../../store';
 import HistoryRouter from '../history-router/history-router';
 import { ToastContainer } from 'react-toastify';
 import browserHistory from '../../services/browser-history';
-import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { getLoadedDataStatus } from '../../store/app-data/selectors';
 
 function App(): JSX.Element {
-  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isDataLoaded = useAppSelector(getLoadedDataStatus);
 
   useEffect(() => {
     store.dispatch(checkAuthAction());
-    store.dispatch(fetchOffersAction());
-  }, [authorizationStatus]);
+  }, []);
 
   if (!isDataLoaded) {
     return (
@@ -38,14 +35,14 @@ function App(): JSX.Element {
       <ToastContainer />
       <HistoryRouter history={browserHistory}>
         <Routes>
-          <Route path={AppRoute.Root} element={<Layout authorizationStatus={authorizationStatus} />}>
+          <Route path={AppRoute.Root} element={<Layout />}>
             <Route
               index
               element={<MainPage />}
             />
             <Route
               path={AppRoute.Room}
-              element={<OfferPage authorizationStatus={authorizationStatus} />}
+              element={<OfferPage />}
             />
             <Route
               path={AppRoute.Favorites}

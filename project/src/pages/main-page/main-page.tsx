@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AppRoute, CITIES, CITY_DEFAULT, Filters } from '../../consts';
+import { AppRoute, CITIES, CITY_DEFAULT, Filters, HEIGHT_TOP_MENU } from '../../consts';
 import { getCapitalizeFirstLetter } from '../../utils/common';
 import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
@@ -12,6 +12,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import FilterSort from '../../components/filter-sort/filter-sort';
 import { changeDataCityAction, loadOfferById } from '../../store/app-data/app-data';
 import { getCity, getCityName, getOffers } from '../../store/app-data/selectors';
+import MainPageEmpty from '../../components/main-page-empty/main-page-empty';
+import { fetchOffersAction } from '../../store/api-action';
+import { store } from '../../store';
 
 function MainPage() : JSX.Element {
   const location = useLocation();
@@ -27,6 +30,7 @@ function MainPage() : JSX.Element {
   const [offersByCity, setOffersByCity] = useState<Offer[] | undefined>(undefined);
   const [offersByCityFilter, setOffersByCityFilter] = useState<Offer[] | undefined>(undefined);
   const [activeFilter, setActiveFilter] = useState<string>(Filters.Popular);
+  const [init, setInit] = useState<boolean>(false);
 
   const onListItemHover = useCallback((offerId: number | null) => {
     if (offerId) {
@@ -56,6 +60,11 @@ function MainPage() : JSX.Element {
   useEffect(() => {
     const refElement = citiesRef.current;
 
+    if (!init) {
+      store.dispatch(fetchOffersAction());
+      setInit(true);
+    }
+
     if (location.hash) {
       const city = getCapitalizeFirstLetter(location.hash.slice(1));
       const offersByCityNew = getOffersByCity(offers, city);
@@ -72,14 +81,14 @@ function MainPage() : JSX.Element {
       navigate(`${AppRoute.Root}#${CITY_DEFAULT.toLowerCase()}`, { replace: true });
     }
 
-    if (refElement) {
-      setHeight(refElement.offsetHeight);
+    if (refElement && refElement.offsetHeight) {
+      setHeight((refElement.offsetHeight - HEIGHT_TOP_MENU));
     }
 
-  }, [location, navigate, citiesRef, dispatch, offers]);
+  }, [location, navigate, citiesRef, dispatch, offers, init]);
 
   return (
-    <main className={`page__main page__main--index ${!offersByCityFilter?.length && 'page__main--index-empty'}`}>
+    <main ref={citiesRef} className={`page__main page__main--index ${!offersByCityFilter?.length && 'page__main--index-empty'}`}>
       <h1 className="visually-hidden">Cities</h1>
       <div className="tabs">
         <section className="locations container">
@@ -87,7 +96,7 @@ function MainPage() : JSX.Element {
         </section>
       </div>
       { offersByCityFilter?.length ?
-        <div className="cities" ref={citiesRef}>
+        <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
@@ -101,17 +110,7 @@ function MainPage() : JSX.Element {
           </div>
         </div>
         :
-        <div className="cities" ref={citiesRef}>
-          <div className="cities__places-container cities__places-container--empty container">
-            <section className="cities__no-places">
-              <div className="cities__status-wrapper tabs__content">
-                <b className="cities__status">No places to stay available</b>
-                <p className="cities__status-description">We could not find any property available at the moment in Dusseldorf</p>
-              </div>
-            </section>
-            <div className="cities__right-section"></div>
-          </div>
-        </div>}
+        <MainPageEmpty/>}
     </main>
   );
 }

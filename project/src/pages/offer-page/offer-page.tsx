@@ -1,7 +1,6 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import cn from 'classnames';
-import { OfferPageProps } from './offer-page-types';
-import { AppRoute, AuthorizationStatus, MapSize } from '../../consts';
+import { AppRoute, MapSize } from '../../consts';
 import { getCapitalizeFirstLetter } from '../../utils/common';
 import { getRatingOffer } from '../../utils/card';
 import { getOfferImages } from '../../utils/offer';
@@ -11,12 +10,14 @@ import OfferList from '../../components/offer-list/offer-list';
 import { Point } from '../../types/cities';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useEffect, useState } from 'react';
-import { fetchOfferByIdAction } from '../../store/api-action';
+import { fetchOfferByIdAction, postOfferStatusAction } from '../../store/api-action';
 import NotFoundPage from '../not-found-page/not-found-page';
 import { Offer } from '../../types/offer';
 import { getOffer, getOfferNearby, getReview } from '../../store/app-data/selectors';
+import { isCheckedAuth } from '../../utils/auth';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
-function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
+function OfferPage() : JSX.Element {
   const location = useLocation();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -36,7 +37,8 @@ function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
     zoom: offer?.location.zoom,
   };
 
-  const isAuth = authorizationStatus === AuthorizationStatus.Auth;
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isAuth = isCheckedAuth(authorizationStatus);
 
   const dispatch = useAppDispatch();
 
@@ -46,7 +48,7 @@ function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
   };
 
   const postFavorites = () => {
-    throw new Error('Function \'postFavorites\' isn\'t implemented.');
+    dispatch(postOfferStatusAction({idOffer: offer?.id, status: Number(!offer?.isFavorite)}));
   };
 
   const handleButtonClick = () => {
@@ -184,7 +186,7 @@ function OfferPage({authorizationStatus}: OfferPageProps) : JSX.Element {
           <div className="container">
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
-              <OfferList offers={nearby} onListItemHover={() => false } />
+              <OfferList offers={nearby} onListItemHover={() => false } typeView={'nearby'}/>
             </section>
           </div>
         </main>
