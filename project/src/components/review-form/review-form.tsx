@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormEvent, ChangeEvent, useState, useEffect, useRef } from 'react';
 import { RATING_OFFER } from '../../consts';
-import { useAppDispatch } from '../../hooks';
 import { ReviewFormProp } from '../../types/review-form';
 import RatingItem from '../rating-item/rating-item';
 
@@ -13,8 +12,6 @@ function ReviewForm(props: ReviewFormProp) : JSX.Element {
 
   const formRef = useRef<null | HTMLFormElement>(null);
   const textAreaRef = useRef<null | HTMLTextAreaElement>(null);
-
-  const dispatch = useAppDispatch();
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -43,7 +40,7 @@ function ReviewForm(props: ReviewFormProp) : JSX.Element {
       }
     }
 
-  }, [dispatch, error, isLoaded]);
+  }, [error, isLoaded]);
 
   return (
     <form className="reviews__form form" onSubmit={handleFormSubmit} ref={formRef}>

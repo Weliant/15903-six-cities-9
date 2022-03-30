@@ -2,11 +2,18 @@ import { getListOffersFavorites } from '../../utils/favorites';
 import { useAppSelector } from '../../hooks';
 import FavoritesItem from '../../components/favorites-item/favorites-item';
 import Footer from '../../components/footer/footer';
-import { getOffers } from '../../store/app-data/selectors';
+import { getFavoritesOffers } from '../../store/app-data/selectors';
+import { store } from '../../store';
+import { useEffect } from 'react';
+import { fetchFavoritesOffersAction } from '../../store/api-action';
 
 function FavoritesPage() : JSX.Element {
-  const offers = useAppSelector(getOffers);
+  const offers = useAppSelector(getFavoritesOffers);
   const listOffersFavorites = getListOffersFavorites(offers);
+
+  useEffect(() => {
+    store.dispatch(fetchFavoritesOffersAction());
+  }, []);
 
   return (
     <>

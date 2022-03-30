@@ -19,6 +19,7 @@ export enum AuthorizationStatus {
 
 export const RATING_OFFER = 5;
 export const COUNT_IMAGE_OFFER = 6;
+export const HEIGHT_TOP_MENU = 106;
 
 export enum ImgSize {
   Width = 260,
@@ -39,7 +40,6 @@ export enum APIRoute {
   Hotels = '/hotels',
   OfferNearby = 'nearby',
   Favorite = '/favorite',
-  FavoriteEdit = '/favorite/{hotelId}/{status}',
   Comments = '/comments',
   Login = '/login',
   Logout = '/logout',
