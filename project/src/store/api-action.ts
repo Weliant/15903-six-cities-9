@@ -19,7 +19,7 @@ import { errorReview,
   updateFavoritesOffers,
   updateNearBy,
   updateOffers } from './app-data/app-data';
-import { requireAuthorization } from './user-process/user-process';
+import { requireAuthorization, requireUser } from './user-process/user-process';
 
 export const fetchOffersAction = createAsyncThunk(
   'data/fetchOffers',
@@ -136,11 +136,12 @@ export const loginAction = createAsyncThunk(
   'user/login',
   async ({email, password}: Auth) => {
     try {
-      const {data: {token}} = await api.post<User>(APIRoute.Login, {email, password});
-      saveToken(token);
+      const {data} = await api.post<User>(APIRoute.Login, {email, password});
+      saveToken(data.token);
       store.dispatch(requireAuthorization(AuthorizationStatus.Auth));
-      store.dispatch(redirectToRoute(AppRoute.Root));
+      store.dispatch(requireUser(data));
       store.dispatch(loading(true));
+      store.dispatch(redirectToRoute(AppRoute.Root));
     } catch (error) {
       errorHandle(error);
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));

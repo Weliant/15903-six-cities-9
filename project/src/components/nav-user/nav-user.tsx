@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../consts';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logoutAction } from '../../store/api-action';
+import { getUser } from '../../store/user-process/selectors';
 import { HeaderProps } from '../../types/header';
 
 function NavUser(props: HeaderProps) : JSX.Element {
   const {isAuth} = props;
   const dispatch = useAppDispatch();
+  const user = useAppSelector(getUser);
 
   const handleSignInClick = () => {
     dispatch(logoutAction());
@@ -20,9 +22,12 @@ function NavUser(props: HeaderProps) : JSX.Element {
           <>
             <li className="header__nav-item user">
               <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
-                <div className="header__avatar-wrapper user__avatar-wrapper">
-                </div>
-                <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                {user?.avatarUrl?
+                  <div className="header__avatar-wrapper">
+                    <img src={user.avatarUrl} alt="Avatar" />
+                  </div>
+                  : <div className="header__avatar-wrapper user__avatar-wrapper"></div>}
+                <span className="header__user-name user__name">{user?.email}</span>
               </Link>
             </li>
             <li className="header__nav-item">

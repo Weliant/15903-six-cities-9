@@ -1,6 +1,7 @@
 import { AuthorizationStatus } from '../consts.js';
 import { store } from '../store/index.js';
 import { CityOffer, Offer, IReviewOffer } from './offer.js';
+import { User } from './user.js';
 
 export type ReviewStatus = {
   error: boolean,
@@ -23,5 +24,6 @@ export type State = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export type UserProcess = {
-  authorizationStatus: AuthorizationStatus
+  authorizationStatus: AuthorizationStatus,
+  user?: User
 };
